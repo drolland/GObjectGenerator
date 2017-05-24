@@ -1,20 +1,15 @@
+#pragma once
 
-
-#ifndef OBJECT_GENERATOR_H
-#define OBJECT_GENERATOR_H
-
-#include <glib-2.0/glib/gtypes.h>
+#include <glib-2.0/glib.h>
 
 
 G_BEGIN_DECLS
 
-typedef struct _GogObjectFiles GogObjectFiles;
 
-GogObjectFiles* gog_generate_object(const gchar* __namespace,const char* __object_name );
+void gog_generate_object(gchar* _namespace,gchar* _object_name,gchar* _parent_namespace,gchar* _parent_object_name,gchar* path );
         
         
         
 G_END_DECLS
 
-#endif /* OBJECT_GENERATOR_H */
 

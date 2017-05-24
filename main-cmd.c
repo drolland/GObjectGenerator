@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 
+#include "gog_object_generator.h"
+
 int main(int argc,char** argv){
+    
+    gog_generate_object("wh","text_file","g","object",NULL);
     
 }

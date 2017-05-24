@@ -49,22 +49,38 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+#Files to convert to header
+SRC_TO_HEADER =		     \
+    object_final_private.h   \
+    object_final_private.c   \
 
-# build
+SRC_TO_HEADER_INT = $(subst .,_,$(SRC_TO_HEADER))
+SRC_TO_HEADER_TARGET = $(patsubst %,%.h,$(SRC_TO_HEADER_INT))	     
+
+
+# buid
 build: .build-post
+	
+$(SRC_TO_HEADER_TARGET): 
+	tools/file_to_header.py $@
 
-.build-pre:
-# Add your pre 'build' code here...
+.build-pre: $(SRC_TO_HEADER_TARGET)
+	
 
 .build-post: .build-impl
 # Add your post 'build' code here...
 
 
+
+	
+	
+
+
 # clean
 clean: .clean-post
 
-.clean-pre:
-# Add your pre 'clean' code here...
+.clean-pre: 
+	rm $(SRC_TO_HEADER_TARGET)
 
 .clean-post: .clean-impl
 # Add your post 'clean' code here...
