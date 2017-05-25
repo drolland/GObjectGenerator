@@ -8,8 +8,17 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/namespace_objectname.c</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/gtk-3.0/gtk.css</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/Makefile</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/wh_text_file.c</file>
             <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/gog_macros.h</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/gog_object_generator.h</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/tools/file_to_header.py</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/gog_text.c</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/namespace_objectname.h</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/main-cmd.c</file>
             <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/gog_object_generator.c</file>
+            <file>file:/home/denis/Dropbox/Project/Netbeans/GObjectGenerator/wh_text_file.h</file>
         </group>
     </open-files>
 </project-private>
