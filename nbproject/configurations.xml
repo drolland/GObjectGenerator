@@ -16,14 +16,17 @@
       <itemPath>gog_macros.h</itemPath>
       <itemPath>gog_object_generator.c</itemPath>
       <itemPath>gog_object_generator.h</itemPath>
+      <itemPath>gog_object_templates.h</itemPath>
       <itemPath>gog_text.c</itemPath>
       <itemPath>gog_text.h</itemPath>
       <itemPath>main-cmd.c</itemPath>
       <itemPath>main-gui.c</itemPath>
       <itemPath>namespace_objectname.c</itemPath>
       <itemPath>namespace_objectname.h</itemPath>
-      <itemPath>object_private_final.c</itemPath>
-      <itemPath>object_private_final.h</itemPath>
+      <itemPath>object_final_private.c</itemPath>
+      <itemPath>object_final_private.c.h</itemPath>
+      <itemPath>object_final_private.h</itemPath>
+      <itemPath>object_final_private.h.h</itemPath>
       <itemPath>wh_text_file.c</itemPath>
       <itemPath>wh_text_file.h</itemPath>
     </logicalFolder>
@@ -52,7 +55,7 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>CLang|CLang</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -100,6 +103,8 @@
       </item>
       <item path="gog_object_generator.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="gog_object_templates.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="gog_text.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="gog_text.h" ex="false" tool="3" flavor2="0">
@@ -110,9 +115,11 @@
       </item>
       <item path="namespace_objectname.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="object_private_final.c" ex="false" tool="0" flavor2="0">
+      <item path="object_final_private.c.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="object_private_final.h" ex="false" tool="3" flavor2="0">
+      <item path="object_final_private.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="object_final_private.h.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/gog_text_test.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -165,6 +172,8 @@
       </item>
       <item path="gog_object_generator.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="gog_object_templates.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="gog_text.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="gog_text.h" ex="false" tool="3" flavor2="0">
@@ -179,9 +188,13 @@
       </item>
       <item path="namespace_objectname.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="object_private_final.c" ex="false" tool="0" flavor2="0">
+      <item path="object_final_private.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="object_private_final.h" ex="false" tool="3" flavor2="0">
+      <item path="object_final_private.c.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="object_final_private.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="object_final_private.h.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/gog_text_test.c" ex="false" tool="0" flavor2="0">
       </item>

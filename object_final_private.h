@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <glib-object.h>
@@ -5,7 +6,7 @@
 G_BEGIN_DECLS
         
 #define NAMESPACE_TYPE_OBJECTNAME (namespace_objectname_get_type())
-G_DECLARE_FINAL_TYPE(NamespaceObjectName,namespace_objectname,NAMESPACE,OBJECTNAME,PNAMESPACEPOBJECTNAME)
+G_DECLARE_FINAL_TYPE(NamespaceObjectName,namespace_objectname,NAMESPACE,OBJECTNAME,PNamespacePObjectName)
 
 typedef struct _NamespaceObjectNamePrivate NamespaceObjectNamePrivate;
 
@@ -21,6 +22,7 @@ typedef struct _NamespaceObjectNameClass {
 } NamespaceObjectNameClass;
 */
 
+
 /*  *******************************************  *
  *  NamespaceObjectName Public Methods           *
  *  *******************************************  */
@@ -29,6 +31,3 @@ NamespaceObjectName* namespace_objectname_new();
    
         
 G_END_DECLS
-        
-
-

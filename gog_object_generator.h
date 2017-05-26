@@ -5,8 +5,11 @@
 
 G_BEGIN_DECLS
 
+enum {
+    GOG_OBJECT_FINAL_PRIVATE
+};
 
-void gog_generate_object(gchar* _namespace,gchar* _object_name,gchar* _parent_namespace,gchar* _parent_object_name,gchar* path );
+void gog_generate_object(gint object_type,gchar* output_path,gchar* _namespace,gchar* _object_name,gchar* _parent_namespace,gchar* _parent_object_name );
         
         
         

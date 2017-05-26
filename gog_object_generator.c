@@ -7,9 +7,19 @@
 #include <glib/gstdio.h>
 #include "gog_macros.h"
 #include "gog_object_generator.h"
+#include "gog_object_templates.h"
+
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "Gog-ObjectGenerator" 
+
+/*
+ *  SubsTreeNode are nodes composing a Tree used to allow fast multpile string replacement in a char* buffer
+ * 
+ *  Convenient functions are provided to manipulate the tree.
+ * 
+ *  End user only need to use g_str_substitute ( Defined in this file ).
+ */
 
 typedef struct _SubsTreeNode {
     GSList* childs;
@@ -17,18 +27,22 @@ typedef struct _SubsTreeNode {
     gchar* substitute;
 } SubsTreeNode;
 
+#define SUBS_TREE_NODE(o) ((SubsTreeNode*)o)
+
 static inline SubsTreeNode* subs_tree_node_new(gchar c,gchar* substitute){
     SubsTreeNode* node = g_malloc(sizeof(SubsTreeNode));
     node->childs = NULL;
     node->c = c;
     node->substitute = substitute;      // Assume we don't need to duplicate string
+    return node;
 }
 
 static inline void subs_tree_node_add_child(SubsTreeNode* self, SubsTreeNode* child){
     self->childs = g_slist_append(self->childs,child);
 }
 
-static inline SubsTreeNode* subs_tree_node_get_child(SubsTreeNode* self,gchar c){
+
+static inline SubsTreeNode* subs_tree_node_get_child_unsorted(SubsTreeNode* self,gchar c){
     
     if ( self->childs == NULL)
         return NULL;
@@ -38,11 +52,46 @@ static inline SubsTreeNode* subs_tree_node_get_child(SubsTreeNode* self,gchar c)
     
     do {
         SubsTreeNode* node = (SubsTreeNode*)current->data;
-        if ( node->c == c )
-            return node;      
+        
+        if ( c == node->c )
+            return node;    
     } while( ( current = g_slist_next(current) ) != NULL );
  
     return NULL;    
+}
+
+/* subs_tree_node_get_child provides faster lookup but doesn't work on an unsorted tree */
+static inline SubsTreeNode* subs_tree_node_get_child(SubsTreeNode* self,gchar c){
+    
+    if ( self->childs == NULL)
+        return NULL;
+    
+    GSList* list = self->childs;
+    GSList* current = list;
+    
+    
+    do {
+        SubsTreeNode* node = (SubsTreeNode*)current->data;
+        if ( c < node->c )
+            return NULL;
+        if ( c == node->c )
+            return node;    
+    } while( ( current = g_slist_next(current) ) != NULL );
+ 
+    return NULL;    
+}
+
+gint subs_tree_node_sort_childs_func(gconstpointer a,gconstpointer b){   
+        return (int)SUBS_TREE_NODE(a)->c - (int)SUBS_TREE_NODE(b)->c ;
+    }
+
+static void subs_tree_node_sort_childs(SubsTreeNode* self){
+          
+    self->childs = g_slist_sort(self->childs,&subs_tree_node_sort_childs_func);
+     
+    for(GSList* iter = self->childs; iter != NULL ; iter = g_slist_next(iter) ){
+        subs_tree_node_sort_childs(SUBS_TREE_NODE(iter->data));
+    }
 }
 
 
@@ -60,7 +109,16 @@ static inline void subs_tree_node_free(gpointer self){
 }
 
 
-SubsTreeNode* subs_tree_build(gchar** strings,gchar** substitution_strings,gint nb_strings){
+SubsTreeNode* subs_tree_build(gchar** strings,gchar** substitution_strings){
+    
+    g_assert(strings != NULL && substitution_strings != NULL);
+    
+    int nb_strings = g_strv_length(strings);
+    
+    if ( nb_strings != g_strv_length(substitution_strings)){
+        g_warning("subs_tree_build : number of strings and replacement strings does not match");
+        return NULL;
+    }
     
     SubsTreeNode* tree_root = subs_tree_node_new('\0',NULL);
     
@@ -72,7 +130,7 @@ SubsTreeNode* subs_tree_build(gchar** strings,gchar** substitution_strings,gint 
         
         for(int j = 0; j < length ; j++){
             
-            SubsTreeNode* get_node = subs_tree_node_get_child(iter,strings[i][j]);
+            SubsTreeNode* get_node = subs_tree_node_get_child_unsorted(iter,strings[i][j]);
             
             if ( get_node != NULL ){
                 
@@ -93,18 +151,26 @@ SubsTreeNode* subs_tree_build(gchar** strings,gchar** substitution_strings,gint 
         
     }
     
-    return tree_root;
     
+    /* Sort childs list according to character( Allow faster access during parsing */
+    
+    subs_tree_node_sort_childs(tree_root);
+    
+    return tree_root;
 }
 
 
-gchar* g_str_substitute(gchar* src,gint src_length,gchar** strings,gchar** substitution_strings,gint nb_strings){
+gchar* g_str_substitute(const gchar* src,gchar** strings,gchar** substitution_strings){
     
-    SubsTreeNode* tree_root = subs_tree_build(strings,substitution_strings,nb_strings);
+    g_return_val_if_fail(src,NULL);
+    
+    SubsTreeNode* tree_root = subs_tree_build(strings,substitution_strings);
     SubsTreeNode* iter = tree_root;
     
-    gchar* src_begin = src;                 //  Pointers keeping track of the begining and the end of the source buffer interval to be copied to destination buffer
-    gchar* src_end = src;                   
+    g_return_val_if_fail(tree_root,NULL);
+    
+    const gchar* src_begin = src;                 //  Pointers keeping track of the begining and the end of the source buffer interval to be copied to destination buffer
+    const gchar* src_end = src;                   
     gchar* dst_ptr = 0;                     //  pointer keeping track of the destination buffer position during the process of copy/substituion
 
     gchar* dst = 0;                         //  Destination string
@@ -123,7 +189,7 @@ gchar* g_str_substitute(gchar* src,gint src_length,gchar** strings,gchar** subst
         if ( iter != tree_root){
             SubsTreeNode* next = iter;
             
-            gchar* src_end_backup = src_end - 1;
+            const gchar* src_end_backup = src_end - 1;
             
             
             while( (next = subs_tree_node_get_child(next,*src_end)) != NULL  ){
@@ -168,7 +234,7 @@ gchar* g_str_substitute(gchar* src,gint src_length,gchar** strings,gchar** subst
         
         if ( iter != tree_root){
            
-            gchar* src_end_backup = src_end - 1;
+            const gchar* src_end_backup = src_end - 1;
                         
             SubsTreeNode* next = iter;
             
@@ -206,25 +272,7 @@ gchar* g_str_substitute(gchar* src,gint src_length,gchar** strings,gchar** subst
     return dst;
 }
 
-gchar* gog_build_name_upper(gchar* str){
-    
-    gsize length = strlen(str);
-    gsize nb_underscore = 0;
-    
-    for(int i = 0; i < length; i++)
-        if ( str[i] == '_') nb_underscore++;
-    
-    gchar* dst = g_malloc((length - nb_underscore +1) * sizeof(gchar));
-    gchar* dst_ptr = dst;
-    
-    for(int i = 0; i < length; i++)
-        if ( str[i] != '_') {
-            *dst_ptr = g_ascii_tolower(str[i]);
-             dst_ptr++;
-        }
-    
-    return dst;
-}
+
 
 static gchar* gog_str_make_macro(gchar* str){  
     return g_ascii_strup(str,strlen(str));
@@ -264,26 +312,10 @@ static gchar* gog_str_make_func(gchar* str){
     return g_ascii_strdown(str,strlen(str));
 }
 
-void gog_generate_file(gchar* input_path,gchar* _namespace,gchar* _object_name,gchar* _parent_namespace,gchar* _parent_object_name,gchar* output_path){
+
+static gchar* gog_generate_object_file_from_memory(const gchar* src,gchar* _namespace,gchar* _object_name,gchar* _parent_namespace,gchar* _parent_object_name){
     
-    GError* error = 0;  
-    gchar* read_buffer = 0;
-    gsize read_buffer_size = 0 ;
-    
-    GFile* input_file = g_file_new_for_path(input_path);
-    
-    error = 0;
-    GIOChannel* input_channel = g_io_channel_new_file(input_path,"r",&error);
-    
-    GOG_ERROR(error,"Error while opening input file : %s",error->message);
-  
-    
-    error = 0;
-    g_io_channel_read_to_end(input_channel,&read_buffer,&read_buffer_size,&error);
-    GOG_ERROR(error,"Error occured while reading file template :  %s",error->message);
- 
-    
-    
+
     enum {
         NAMESPACE_MACRO,
         NAMESPACE_NAME,
@@ -297,6 +329,7 @@ void gog_generate_file(gchar* input_path,gchar* _namespace,gchar* _object_name,g
         PARENT_OBJECTNAME_MACRO,
         PARENT_OBJECTNAME_NAME,
         PARENT_OBJECTNAME_FUNC,
+        ENUM_END,
         ENUM_TOTAL
     };
     
@@ -305,7 +338,8 @@ void gog_generate_file(gchar* input_path,gchar* _namespace,gchar* _object_name,g
         "NAMESPACE"     ,   "Namespace"     ,   "namespace", 
         "OBJECTNAME"    ,   "ObjectName"    ,   "objectname",
         "PNAMESPACE"    ,   "PNamespace"    ,   "pnamespace",
-        "POBJECTNAME"   ,   "PObjectName"   ,   "pobjectname"
+        "POBJECTNAME"   ,   "PObjectName"   ,   "pobjectname",
+        NULL,
     };
     
     gchar* substitute_string[ENUM_TOTAL];
@@ -322,9 +356,26 @@ void gog_generate_file(gchar* input_path,gchar* _namespace,gchar* _object_name,g
     substitute_string[PARENT_OBJECTNAME_MACRO] = gog_str_make_macro(_parent_object_name);
     substitute_string[PARENT_OBJECTNAME_NAME] = gog_str_make_name(_parent_object_name);
     substitute_string[PARENT_OBJECTNAME_FUNC] = gog_str_make_func(_parent_object_name);
+    substitute_string[ENUM_END] = NULL;
     
     
-    gchar* write_buffer = g_str_substitute(read_buffer,read_buffer_size,strings,substitute_string,ENUM_TOTAL);
+    gchar* dst = g_str_substitute(src,strings,substitute_string);
+     
+    for(int i = 0; i < ENUM_TOTAL; i++) 
+        if ( substitute_string[i] ){
+            g_free(substitute_string[i]);
+        }
+            
+    return dst;
+    
+}
+
+
+void gog_generate_object_file(const gchar* src,gchar* output_path,gchar* _namespace,gchar* _object_name,gchar* _parent_namespace,gchar* _parent_object_name){
+    
+    GError* error = 0;  
+        
+    gchar* write_buffer = gog_generate_object_file_from_memory(src,_namespace,_object_name,_parent_namespace,_parent_object_name);
     
     error = 0;
     GIOChannel* output_channel = g_io_channel_new_file(output_path,"w",&error);
@@ -337,30 +388,20 @@ void gog_generate_file(gchar* input_path,gchar* _namespace,gchar* _object_name,g
     
  cleanup:
  
-    if ( input_channel ) {
-        g_io_channel_shutdown(input_channel,TRUE,NULL);
-        g_io_channel_unref(input_channel);
-    }
  
     if ( output_channel ) {
         g_io_channel_shutdown(output_channel,TRUE,NULL);
         g_io_channel_unref(output_channel);
     }
  
-    if ( read_buffer ) g_free(read_buffer);
     
     if ( write_buffer) g_free(write_buffer);
- 
-    for(int i = 0; i < ENUM_TOTAL; i++) 
-        if ( substitute_string[i] ){
-            g_free(substitute_string[i]);
-        }
             
     
 }
 
 
-void gog_generate_object(gchar* _namespace,gchar* _objectname,gchar* _parent_namespace,gchar* _parent_object_name,gchar* output_path ){
+void gog_generate_object(gint object_type,gchar* output_path ,gchar* _namespace,gchar* _objectname,gchar* _parent_namespace,gchar* _parent_object_name){
     
     GString* header_output_path = g_string_new(output_path);
     g_string_append_printf(header_output_path,"%s_%s.h",_namespace,_objectname);
@@ -368,8 +409,17 @@ void gog_generate_object(gchar* _namespace,gchar* _objectname,gchar* _parent_nam
     GString* source_output_path = g_string_new(output_path);
     g_string_append_printf(source_output_path,"%s_%s.c",_namespace,_objectname);
     
-    gog_generate_file("object_final_private.c",_namespace,_objectname,_parent_namespace,_parent_object_name,source_output_path->str);
-    gog_generate_file("object_final_private.h",_namespace,_objectname,_parent_namespace,_parent_object_name,header_output_path->str);
+    switch(object_type){
+        case GOG_OBJECT_FINAL_PRIVATE:
+             gog_generate_object_file(_data_object_final_private_c,source_output_path->str,_namespace,_objectname,_parent_namespace,_parent_object_name);
+             gog_generate_object_file(_data_object_final_private_h,header_output_path->str,_namespace,_objectname,_parent_namespace,_parent_object_name);
+             break;
+             
+        default:
+            break;
+    
+    }
+   
     
     
     g_string_free(header_output_path,TRUE);

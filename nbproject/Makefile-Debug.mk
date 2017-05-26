@@ -14,14 +14,14 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=gcc
-CCC=g++
-CXX=g++
+CC=clang
+CCC=clang++
+CXX=clang++
 FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=CLang-Linux
 CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/gog_object_generator.o \
 	${OBJECTDIR}/gog_text.o \
 	${OBJECTDIR}/main-cmd.o \
-	${OBJECTDIR}/object_private_final.o \
 	${OBJECTDIR}/wh_text_file.o
 
 # Test Directory
@@ -90,11 +89,6 @@ ${OBJECTDIR}/main-cmd.o: main-cmd.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -I/usr/include/gtk-3.0 -I/usr/include/glib-2.0 -I/usr/include/gio-unix-2.0 -std=c11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main-cmd.o main-cmd.c
-
-${OBJECTDIR}/object_private_final.o: object_private_final.c
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -I/usr/include/gtk-3.0 -I/usr/include/glib-2.0 -I/usr/include/gio-unix-2.0 -std=c11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_private_final.o object_private_final.c
 
 ${OBJECTDIR}/wh_text_file.o: wh_text_file.c
 	${MKDIR} -p ${OBJECTDIR}
@@ -156,19 +150,6 @@ ${OBJECTDIR}/main-cmd_nomain.o: ${OBJECTDIR}/main-cmd.o main-cmd.c
 	    $(COMPILE.c) -g -I/usr/include/gtk-3.0 -I/usr/include/glib-2.0 -I/usr/include/gio-unix-2.0 -std=c11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main-cmd_nomain.o main-cmd.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main-cmd.o ${OBJECTDIR}/main-cmd_nomain.o;\
-	fi
-
-${OBJECTDIR}/object_private_final_nomain.o: ${OBJECTDIR}/object_private_final.o object_private_final.c 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/object_private_final.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.c) -g -I/usr/include/gtk-3.0 -I/usr/include/glib-2.0 -I/usr/include/gio-unix-2.0 -std=c11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_private_final_nomain.o object_private_final.c;\
-	else  \
-	    ${CP} ${OBJECTDIR}/object_private_final.o ${OBJECTDIR}/object_private_final_nomain.o;\
 	fi
 
 ${OBJECTDIR}/wh_text_file_nomain.o: ${OBJECTDIR}/wh_text_file.o wh_text_file.c 

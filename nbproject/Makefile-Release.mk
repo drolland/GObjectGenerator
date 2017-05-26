@@ -40,7 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/main-cmd.o \
 	${OBJECTDIR}/main-gui.o \
 	${OBJECTDIR}/namespace_objectname.o \
-	${OBJECTDIR}/object_private_final.o \
+	${OBJECTDIR}/object_final_private.o \
 	${OBJECTDIR}/wh_text_file.o
 
 # Test Directory
@@ -103,10 +103,10 @@ ${OBJECTDIR}/namespace_objectname.o: namespace_objectname.c
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -std=c11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/namespace_objectname.o namespace_objectname.c
 
-${OBJECTDIR}/object_private_final.o: object_private_final.c
+${OBJECTDIR}/object_final_private.o: object_final_private.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -std=c11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_private_final.o object_private_final.c
+	$(COMPILE.c) -O2 -std=c11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_final_private.o object_final_private.c
 
 ${OBJECTDIR}/wh_text_file.o: wh_text_file.c
 	${MKDIR} -p ${OBJECTDIR}
@@ -196,17 +196,17 @@ ${OBJECTDIR}/namespace_objectname_nomain.o: ${OBJECTDIR}/namespace_objectname.o 
 	    ${CP} ${OBJECTDIR}/namespace_objectname.o ${OBJECTDIR}/namespace_objectname_nomain.o;\
 	fi
 
-${OBJECTDIR}/object_private_final_nomain.o: ${OBJECTDIR}/object_private_final.o object_private_final.c 
+${OBJECTDIR}/object_final_private_nomain.o: ${OBJECTDIR}/object_final_private.o object_final_private.c 
 	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/object_private_final.o`; \
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/object_final_private.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.c) -O2 -std=c11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_private_final_nomain.o object_private_final.c;\
+	    $(COMPILE.c) -O2 -std=c11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/object_final_private_nomain.o object_final_private.c;\
 	else  \
-	    ${CP} ${OBJECTDIR}/object_private_final.o ${OBJECTDIR}/object_private_final_nomain.o;\
+	    ${CP} ${OBJECTDIR}/object_final_private.o ${OBJECTDIR}/object_final_private_nomain.o;\
 	fi
 
 ${OBJECTDIR}/wh_text_file_nomain.o: ${OBJECTDIR}/wh_text_file.o wh_text_file.c 

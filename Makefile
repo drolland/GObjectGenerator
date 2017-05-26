@@ -49,30 +49,30 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
-#Files to convert to header
+#Object file templates to convert to header
 SRC_TO_HEADER =		     \
     object_final_private.h   \
     object_final_private.c   \
 
-SRC_TO_HEADER_INT = $(subst .,_,$(SRC_TO_HEADER))
-SRC_TO_HEADER_TARGET = $(patsubst %,%.h,$(SRC_TO_HEADER_INT))	     
+SRC_TO_HEADER_TARGET = $(patsubst %,%.h,$(SRC_TO_HEADER))	     
 
 
 # buid
 build: .build-post
 	
-$(SRC_TO_HEADER_TARGET): 
-	tools/file_to_header.py $@
-
-.build-pre: $(SRC_TO_HEADER_TARGET)
+.build-pre: gog_object_templates.h
 	
-
 .build-post: .build-impl
 # Add your post 'build' code here...
 
 
+#convert object file templates to header
+gog_object_templates.h: $(SRC_TO_HEADER_TARGET)
+	{ echo '#pragma once\n' ; cat $^; } > gog_object_templates.h
+	 
 
-	
+$(SRC_TO_HEADER_TARGET): 
+	tools/file_to_header.py $(subst .c.h,.c,$(subst .h.h,.h,$@))
 	
 
 
@@ -80,7 +80,7 @@ $(SRC_TO_HEADER_TARGET):
 clean: .clean-post
 
 .clean-pre: 
-	rm $(SRC_TO_HEADER_TARGET)
+	rm -f $(SRC_TO_HEADER_TARGET)
 
 .clean-post: .clean-impl
 # Add your post 'clean' code here...
