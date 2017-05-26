@@ -9,16 +9,16 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=CLang-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/CLang-Linux
-CND_ARTIFACT_NAME_Debug=gobjectgenerator
-CND_ARTIFACT_PATH_Debug=dist/Debug/CLang-Linux/gobjectgenerator
+CND_ARTIFACT_NAME_Debug=gogen
+CND_ARTIFACT_PATH_Debug=dist/Debug/CLang-Linux/gogen
 CND_PACKAGE_DIR_Debug=dist/Debug/CLang-Linux/package
 CND_PACKAGE_NAME_Debug=gobjectgenerator.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/CLang-Linux/package/gobjectgenerator.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
-CND_ARTIFACT_NAME_Release=gobjectgenerator
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/gobjectgenerator
+CND_ARTIFACT_NAME_Release=gogen
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/gogen
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
 CND_PACKAGE_NAME_Release=gobjectgenerator.tar
 CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/gobjectgenerator.tar

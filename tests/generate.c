@@ -20,27 +20,16 @@
 
 
 void test_object_final_private(){
-    
-    struct mallinfo memory_info_begin = mallinfo();
-     
-    gog_generate_object(GOG_OBJECT_FINAL_PRIVATE,"","wh","text_file","g","object");
-    
-    struct mallinfo memory_info_begin = mallinfo();
-    
-    gog_generate_object(GOG_OBJECT_FINAL_PRIVATE,"","wh","text_file","g","object");
-    gog_generate_object(GOG_OBJECT_FINAL_PRIVATE,"","wh","text_file","g","object");
-    gog_generate_object(GOG_OBJECT_FINAL_PRIVATE,"","wh","text_file","g","object");
-    
-    
-    struct mallinfo memory_info_end = mallinfo();
 
+    gog_generate_object(GOG_OBJECT_FINAL_PRIVATE,"","wh","text_file","g","object");
     
-
 }
 
 int main(int argc, char** argv) {
         
     g_print("\e[34m");
+    
+    g_print("GOG Object Generator tests\n");
      
     g_test_init(&argc,&argv,NULL);
     

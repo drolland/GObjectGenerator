@@ -18,7 +18,9 @@
  * 
  *  Convenient functions are provided to manipulate the tree.
  * 
- *  Each node contains a character and pointer to childs node. T
+ *  Each node contains a character and pointers to childs node. 
+ *  Traversal of the tree is done one char by one char using subs_tree_node_get_child() function.
+ *  When a node is a possible match, its field "substitute" contains the replacement string
  * 
  *  End user only need to use g_str_substitute ( Defined in this file ).
  */

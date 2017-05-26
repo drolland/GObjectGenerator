@@ -70,11 +70,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gobjectgenerator
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gogen
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gobjectgenerator: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gogen: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gobjectgenerator ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config --libs glib-2.0 gtk+-3.0 gobject-2.0`
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gogen ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config --libs glib-2.0 gtk+-3.0 gobject-2.0`
 
 ${OBJECTDIR}/gog_object_generator.o: gog_object_generator.c
 	${MKDIR} -p ${OBJECTDIR}

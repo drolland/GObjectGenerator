@@ -24,9 +24,7 @@
       <itemPath>namespace_objectname.c</itemPath>
       <itemPath>namespace_objectname.h</itemPath>
       <itemPath>object_final_private.c</itemPath>
-      <itemPath>object_final_private.c.h</itemPath>
       <itemPath>object_final_private.h</itemPath>
-      <itemPath>object_final_private.h.h</itemPath>
       <itemPath>wh_text_file.c</itemPath>
       <itemPath>wh_text_file.h</itemPath>
     </logicalFolder>
@@ -76,6 +74,7 @@
           <commandLine>`pkg-config --cflags glib-2.0 gtk+-3.0 gobject-2.0`</commandLine>
         </cTool>
         <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gogen</output>
           <commandLine>`pkg-config --libs glib-2.0 gtk+-3.0 gobject-2.0`</commandLine>
         </linkerTool>
       </compileType>
@@ -136,11 +135,7 @@
       </item>
       <item path="namespace_objectname.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="object_final_private.c.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="object_final_private.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="object_final_private.h.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/generate.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -171,6 +166,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/gogen</output>
+        </linkerTool>
       </compileType>
       <folder path="TestFiles/f1">
         <cTool>
@@ -226,11 +224,7 @@
       </item>
       <item path="object_final_private.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="object_final_private.c.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="object_final_private.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="object_final_private.h.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/generate.c" ex="false" tool="0" flavor2="0">
       </item>
