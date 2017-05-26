@@ -51,4 +51,3 @@ void namespace_objectname_init(NamespaceObjectName* self){
 NamespaceObjectName* namespace_objectname_new(){
     return g_object_new(NAMESPACE_TYPE_OBJECTNAME,NULL);
 }
-

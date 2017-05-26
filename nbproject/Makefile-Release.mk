@@ -48,10 +48,12 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
+	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f1
 
 # Test Object Files
 TESTOBJECTFILES= \
+	${TESTDIR}/tests/generate.o \
 	${TESTDIR}/tests/gog_text_test.o
 
 # C Compiler Flags
@@ -120,9 +122,19 @@ ${OBJECTDIR}/wh_text_file.o: wh_text_file.c
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
 
+${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/generate.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.c} -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS}   
+
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/gog_text_test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
+
+
+${TESTDIR}/tests/generate.o: tests/generate.c 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -I. -std=c11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/generate.o tests/generate.c
 
 
 ${TESTDIR}/tests/gog_text_test.o: tests/gog_text_test.c 
@@ -226,6 +238,7 @@ ${OBJECTDIR}/wh_text_file_nomain.o: ${OBJECTDIR}/wh_text_file.o wh_text_file.c
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
+	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
 	    ./${TEST} || true; \

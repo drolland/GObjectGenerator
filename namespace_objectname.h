@@ -29,6 +29,3 @@ NamespaceObjectName* namespace_objectname_new();
    
         
 G_END_DECLS
-        
-
-

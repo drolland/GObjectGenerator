@@ -63,7 +63,7 @@ build: .build-post
 .build-pre: gog_object_templates.h
 	
 .build-post: .build-impl
-# Add your post 'build' code here...
+	cp ${CND_DISTDIR}/${CONF}/${CND_PLATFORM_${CONF}}/gobjectgenerator ${OUTPUT_PATH} ~/bin/gogen
 
 
 #convert object file templates to header

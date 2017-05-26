@@ -32,9 +32,9 @@ for line in input_file:
         line = line.replace("\"","\\\"")
 	count = len(line) 
 	output_file.write(line)
-	while count < 140:
-		output_file.write(' ')
-		count += 1
+	#while count < 140:
+	#	output_file.write(' ')
+	#	count += 1
 	output_file.write("\\n\"")
 	output_file.write("\n")
 	data_size += count + 1
